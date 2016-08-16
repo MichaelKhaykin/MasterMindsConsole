@@ -8,24 +8,27 @@ namespace MichaelsMasterMindsConsole
 {
     class Program
     {
-        static int getNumber()
-        {
-
-            Console.WriteLine("Please give me 1 number");
-            int number = 0;
-
-            char pressedKey = Console.ReadKey().KeyChar;
+        /// <summary>
+        /// Asks the user for a digit; reads the digit and checks if it's between 0-9  
+        /// </summary>
+        /// <param name="message">Displays message 4 times</param>
+        /// <returns>digit between 0 and 9</returns>
+        static int getNumber(string message)
+        {            
+            Console.WriteLine(message);
+            int number = -1;
 
             //ASCII values for numbers 0 through 9 are 48 through 57
-            if (pressedKey <= 57 && pressedKey >= 48)
+            while (number == -1)
             {
-                number = int.Parse(pressedKey.ToString());
-            }
-            else
-            {
-                //TODO: Handle invalid input (loop until number is valid)
-            }
+                char pressedKey = Console.ReadKey(true).KeyChar;
 
+                if (pressedKey <= 57 && pressedKey >= 48)
+                {
+                    number = int.Parse(pressedKey.ToString());
+                    Console.WriteLine(number);
+                }
+            }
 
             return number;
         }
@@ -40,10 +43,14 @@ namespace MichaelsMasterMindsConsole
             MasterMindsNumber userInput = new MasterMindsNumber();
             //TODO: Make methods to add user input to MasterMindsNumber
 
+            String[] numberNames = { "first", "second", "third", "fourth" };                       
+
+            for (int i = 0; i < 4; i++)
+            {
+                int number = getNumber(String.Format("Please give me {0} number", numberNames[i]));
+            }
             
 
-            
-            getNumber();
             //int num1 = 3;
             //int num2 = 4;
             //int num3 = 1;
