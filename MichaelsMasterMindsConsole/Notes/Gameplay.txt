@@ -1,0 +1,6 @@
+﻿1. Computer randomly generates a 4-digit number, where first digit is not zero, and no digits repeat
+   a. Generated digits are stored in an array
+
+2. LOOP 4x: 
+   a. User is asked to enter a digit
+   b. Digit is stored in an array
