@@ -48,6 +48,13 @@ namespace MichaelsMasterMindsConsole
             for (int i = 0; i < 4; i++)
             {
                 int number = getNumber(String.Format("Please give me {0} number", numberNames[i]));
+                bool isAddSuccessful = userInput.AddDigit(number);
+
+                if (!isAddSuccessful)
+                {
+                    Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
+                    i--;
+                }
             }
             
 
