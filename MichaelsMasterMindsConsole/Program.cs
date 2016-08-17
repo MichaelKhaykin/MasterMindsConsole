@@ -35,8 +35,6 @@ namespace MichaelsMasterMindsConsole
 
         static void Main(string[] args)
         {
-            
-
             MasterMindsNumber computerNumber = new MasterMindsNumber();
             computerNumber.CreateNumber();
 

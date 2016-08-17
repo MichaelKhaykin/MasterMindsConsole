@@ -19,7 +19,7 @@ namespace MichaelsMasterMindsConsole
             Random rand = new Random();
             int firstNumber = rand.Next(1, 10);
 
-            MasterMindsDigit firstDigit = new MasterMindsDigit(firstNumber, DigitStates.Right);
+            MasterMindsDigit firstDigit = new MasterMindsDigit(firstNumber, DigitStates.Correct);
             numbersArray[0] = firstDigit;
 
 
@@ -34,7 +34,7 @@ namespace MichaelsMasterMindsConsole
                 }
                 //if it comes to this point the number is unique
 
-                MasterMindsDigit uniqueNumber = new MasterMindsDigit(newNumber, DigitStates.Right);
+                MasterMindsDigit uniqueNumber = new MasterMindsDigit(newNumber, DigitStates.Correct);
                 numbersArray[i] = uniqueNumber;
             }
         }
@@ -79,7 +79,7 @@ namespace MichaelsMasterMindsConsole
             {
                 if (this.numbersArray[i].Number == correctNumber.numbersArray[i].Number)
                 {
-                    this.numbersArray[i].State = DigitStates.Right;
+                    this.numbersArray[i].State = DigitStates.Correct;
                     allRightAndRightSpot = true;
                 }
                 else if (correctNumber.contains(numbersArray[i].Number))
@@ -88,7 +88,7 @@ namespace MichaelsMasterMindsConsole
                 }
                 else
                 {
-                    this.numbersArray[i].State = DigitStates.Wrong;
+                    this.numbersArray[i].State = DigitStates.Incorrect;
                 }
             }
 
@@ -125,12 +125,12 @@ namespace MichaelsMasterMindsConsole
 
                 switch (this.numbersArray[i].State)
                 {
-                    case DigitStates.Right:
+                    case DigitStates.Correct:
                         numberState = "correct";
                         break;
 
-                    case DigitStates.Wrong:
-                        numberState = "wrong";
+                    case DigitStates.Incorrect:
+                        numberState = "incorrect";
                         break;
 
                     case DigitStates.WrongSpot:
@@ -142,7 +142,7 @@ namespace MichaelsMasterMindsConsole
                         break;
 
                 }
-                result.AppendLine(String.Format("Digit {0} is {1}", this.numbersArray[i].Number, numberState));
+                result.AppendLine(String.Format("Digit {0} is {1}, and is {2}   ", i + 1, this.numbersArray[i].Number, numberState));
             }
 
             return result.ToString();

@@ -8,8 +8,8 @@ namespace MichaelsMasterMindsConsole
 {
     public enum DigitStates
     {
-       Right,
-       Wrong,
+       Correct,
+       Incorrect,
        WrongSpot,
        Unchecked
     }
