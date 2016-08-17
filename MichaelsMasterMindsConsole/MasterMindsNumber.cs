@@ -70,7 +70,31 @@ namespace MichaelsMasterMindsConsole
 
             return true;
         }
-        //Nered to make a comparison function
+
+        public bool Check(MasterMindsNumber correctNumber)
+        {
+            bool allRightAndRightSpot = false;
+
+            for (int i = 0; i < this.numbersArray.Length; i++)
+            {
+                if (this.numbersArray[i].Number == correctNumber.numbersArray[i].Number)
+                {
+                    this.numbersArray[i].State = DigitStates.Right;
+                    allRightAndRightSpot = true;
+                }
+                else if (correctNumber.contains(numbersArray[i].Number))
+                {
+                    this.numbersArray[i].State = DigitStates.WrongSpot;
+                }
+                else
+                {
+                    this.numbersArray[i].State = DigitStates.Wrong;
+                }
+            }
+
+            return allRightAndRightSpot;
+        }
+
 
         private bool contains(int number)
         {

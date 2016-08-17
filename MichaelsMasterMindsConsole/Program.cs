@@ -41,7 +41,6 @@ namespace MichaelsMasterMindsConsole
             computerNumber.CreateNumber();
 
             MasterMindsNumber userInput = new MasterMindsNumber();
-            //TODO: Make methods to add user input to MasterMindsNumber
 
             String[] numberNames = { "first", "second", "third", "fourth" };                       
 
@@ -56,17 +55,9 @@ namespace MichaelsMasterMindsConsole
                     i--;
                 }
             }
-            
 
-            //int num1 = 3;
-            //int num2 = 4;
-            //int num3 = 1;
-            //int num4 = 8;
-
-            //userInput.AddDigit(num1);
-
-
-            //TODO: Compare the two MasterMindsNumnber objects
+            //Compare the two MasterMindsNumnber objects
+            bool didUserWin = userInput.Check(computerNumber);
         }
     }
 }
