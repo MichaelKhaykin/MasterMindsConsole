@@ -70,6 +70,7 @@ namespace MichaelsMasterMindsConsole
 
             return true;
         }
+        //Nered to make a comparison function
 
         private bool contains(int number)
         {
