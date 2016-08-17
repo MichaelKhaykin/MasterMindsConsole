@@ -73,22 +73,23 @@ namespace MichaelsMasterMindsConsole
 
         public bool Check(MasterMindsNumber correctNumber)
         {
-            bool allRightAndRightSpot = false;
+            bool allRightAndRightSpot = true;
 
             for (int i = 0; i < this.numbersArray.Length; i++)
             {
                 if (this.numbersArray[i].Number == correctNumber.numbersArray[i].Number)
                 {
                     this.numbersArray[i].State = DigitStates.Correct;
-                    allRightAndRightSpot = true;
                 }
                 else if (correctNumber.contains(numbersArray[i].Number))
                 {
                     this.numbersArray[i].State = DigitStates.WrongSpot;
+                    allRightAndRightSpot = false;
                 }
                 else
                 {
                     this.numbersArray[i].State = DigitStates.Incorrect;
+                    allRightAndRightSpot = false;
                 }
             }
 

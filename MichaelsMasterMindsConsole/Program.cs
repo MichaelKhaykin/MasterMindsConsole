@@ -35,30 +35,41 @@ namespace MichaelsMasterMindsConsole
 
         static void Main(string[] args)
         {
+            int tries = 0;
+
             MasterMindsNumber computerNumber = new MasterMindsNumber();
             computerNumber.CreateNumber();
+                       
+            String[] numberNames = { "first", "second", "third", "fourth" };
+            bool didUserWin = false;
 
-            MasterMindsNumber userInput = new MasterMindsNumber();
-
-            String[] numberNames = { "first", "second", "third", "fourth" };                       
-
-            for (int i = 0; i < 4; i++)
+            do
             {
-                int number = getNumber(String.Format("Please give me {0} number", numberNames[i]));
-                bool isAddSuccessful = userInput.AddDigit(number);
+                tries++;
+                MasterMindsNumber userInput = new MasterMindsNumber();
 
-                if (!isAddSuccessful)
+                for (int i = 0; i < 4; i++)
                 {
-                    Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
-                    i--;
+                    int number = getNumber(String.Format("Please give me {0} number", numberNames[i]));
+                    bool isAddSuccessful = userInput.AddDigit(number);
+
+                    if (!isAddSuccessful)
+                    {
+                        Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
+                        i--;
+                    }
                 }
-            }
 
-            //Compare the two MasterMindsNumnber objects
-            bool didUserWin = userInput.Check(computerNumber);
+                //Compare the two MasterMindsNumnber objects
+                didUserWin = userInput.Check(computerNumber);
 
-            Console.WriteLine("Checking... here are the results:");
-            Console.WriteLine(userInput);
-        }
+                Console.WriteLine("Checking... here are the results:");
+                Console.WriteLine(userInput);
+
+            } while (!didUserWin);
+
+            Console.WriteLine(String.Format("Congratulations! You win! It took you {0} tries.", tries)  );
+            Console.ReadKey();
+        } 
     }
 }
