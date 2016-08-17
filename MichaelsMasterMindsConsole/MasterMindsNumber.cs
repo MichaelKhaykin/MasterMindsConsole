@@ -114,5 +114,38 @@ namespace MichaelsMasterMindsConsole
             return doesContain;
         }
 
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i < this.numbersArray.Length; i++)
+            {
+                string numberState = "";
+
+                switch (this.numbersArray[i].State)
+                {
+                    case DigitStates.Right:
+                        numberState = "correct";
+                        break;
+
+                    case DigitStates.Wrong:
+                        numberState = "wrong";
+                        break;
+
+                    case DigitStates.WrongSpot:
+                        numberState = "in the wrong spot";
+                        break;
+
+                    case DigitStates.Unchecked:
+                        numberState = "not yet checked";
+                        break;
+
+                }
+                result.AppendLine(String.Format("Digit {0} is {1}", this.numbersArray[i].Number, numberState));
+            }
+
+            return result.ToString();
+        }
     }
 }

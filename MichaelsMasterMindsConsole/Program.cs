@@ -58,6 +58,9 @@ namespace MichaelsMasterMindsConsole
 
             //Compare the two MasterMindsNumnber objects
             bool didUserWin = userInput.Check(computerNumber);
+
+            Console.WriteLine("Checking... here are the results:");
+            Console.WriteLine(userInput);
         }
     }
 }
