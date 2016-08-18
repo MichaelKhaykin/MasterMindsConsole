@@ -24,12 +24,12 @@ namespace MichaelsMasterMindsConsole
 
         public void Draw()
         {
-            Console.SetCursorPosition(Position.X, Position.Y);
+            Console.ForegroundColor = Color;
 
             for (int i = 0; i < Texture.Length; i++)
             {
+                Console.SetCursorPosition(Position.X, Position.Y + i);
                 Console.Write(Texture[i]);
-                Console.SetCursorPosition(Position.X, Position.Y + 1);
             }
             
         }

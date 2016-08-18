@@ -62,7 +62,7 @@ namespace MichaelsMasterMindsConsole
 
                     case 2:
                         drawSquares();
-                        Console.WriteLine("Work in progress... Press any key to return to main menu...");
+                        Console.WriteLine("\nWork in progress... Press any key to return to main menu...");
                         Console.ReadKey(true);
                         break;
 
@@ -157,35 +157,38 @@ namespace MichaelsMasterMindsConsole
 
         private static void drawSquares()
         {
+            //Save for later
+            //Console.WriteLine($"0x2580: {(char)0x2580}\n");
+            //Console.WriteLine($"0x2584: {(char)0x2584}\n");
+
             char block = (char)9608; //0x2588;
             string blockLine = new string(block, 3);
             string emptyLine = new string(' ', 60);
 
-            //Console.WriteLine($"0x2580: {(char)0x2580}\n");
-            //Console.WriteLine($"0x2584: {(char)0x2584}\n");
+            string[] texture = { blockLine, blockLine };
+            int lineSpacing = texture.Length + 1;
 
-            //Setting all numbers to black and setting the blocks and numbers positions
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.CursorLeft = 70;
-            Console.WriteLine(String.Format("1: {0}", blockLine));
-            Console.CursorLeft = 70;
-            Console.WriteLine(String.Format("   {0}\n", blockLine));
+            ConsoleSprite[] squares = new ConsoleSprite[8];
+            int x = 70;
+            int y = 0;
+
+            squares[0] = new ConsoleSprite(texture, new Point(x, y), ConsoleColor.Black);
+            y += lineSpacing;
 
             for (int i = 9; i < 16; i++)
             {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.CursorLeft = 70;
-                Console.Write(String.Format("{0}:", i - 7));
-
                 //using console colors 9-16 which is 7 numbers (because we already have one so it's 8 total)
-                Console.ForegroundColor = (ConsoleColor)i;
-                Console.CursorLeft = 70;
-                Console.WriteLine(String.Format("{0}: {1}", i - 7, blockLine));
-                Console.CursorLeft = 70;
-                Console.WriteLine(String.Format("   {0}\n", blockLine));
+                int squareNumber = i - 8;
+                ConsoleColor color = (ConsoleColor)i;
 
-                Console.WriteLine();
+                squares[squareNumber] = new ConsoleSprite(texture, new Point(x, y), color);
+                y += lineSpacing;
             };
+
+            foreach (ConsoleSprite square in squares)
+            {
+                square.Draw();
+            }
 
         }
     }
