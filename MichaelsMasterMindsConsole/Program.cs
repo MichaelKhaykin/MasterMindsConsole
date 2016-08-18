@@ -13,9 +13,9 @@ namespace MichaelsMasterMindsConsole
         /// </summary>
         /// <param name="message">Displays message 4 times</param>
         /// <returns>digit between 0 and 9</returns>
-        static int getNumber(string message)
+        static int getNumber(string message, char min = '0', char max = '9')
         {
-            Console.WriteLine(message);
+            Console.Write(message);
             int number = -1;
 
             //ASCII values for numbers 0 through 9 are 48 through 57
@@ -23,7 +23,7 @@ namespace MichaelsMasterMindsConsole
             {
                 char pressedKey = Console.ReadKey(true).KeyChar;
 
-                if (pressedKey <= 57 && pressedKey >= 48)
+                if (pressedKey <= max && pressedKey >= min)
                 {
                     number = int.Parse(pressedKey.ToString());
                 }
@@ -36,39 +36,45 @@ namespace MichaelsMasterMindsConsole
         {
             Console.OutputEncoding = Encoding.Unicode;
 
-            char block = (char)9608; //0x2588;
-            string blockLine = new string(block, 3);
-            string emptyLine = new string(' ', 60);
-
-            //Console.WriteLine($"0x2580: {(char)0x2580}\n");
-            //Console.WriteLine($"0x2584: {(char)0x2584}\n");
-
-            //Setting the background to DarkCyan
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.Clear();
-
-            //Setting all numbers to black and setting the blocks and numbers positions
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.CursorLeft = 70;
-            Console.WriteLine(String.Format("1: {0}", blockLine));
-            Console.CursorLeft = 70;
-            Console.WriteLine(String.Format("   {0}\n", blockLine));
-
-            for (int i = 9; i < 16; i++)
+            while (true)
             {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.CursorLeft = 70;
-                Console.Write(String.Format("{0}:", i - 7)); 
+                //Setting the background to DarkCyan
+                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                Console.Clear();
 
-                //using console colors 9-16 which is 7 numbers (because we already have one so it's 8 total)
-                Console.ForegroundColor = (ConsoleColor)i;
-                Console.CursorLeft = 70;
-                Console.WriteLine(String.Format("{0}: {1}", i - 7, blockLine));
-                Console.CursorLeft = 70;
-                Console.WriteLine(String.Format("   {0}\n", blockLine));
-
+                //Display a menu
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("MasterMinds game");
+                Console.WriteLine("--------------------");
+                Console.WriteLine("1) Text version");
+                Console.WriteLine("2) Graphical version");
+                Console.WriteLine("3) Exit");
                 Console.WriteLine();
-            };
+                int choice = getNumber("Enter selection => ", '1', '3');
+
+                Console.Clear();
+
+                switch (choice)
+                {
+                    case 1:
+                        textMasterMinds();
+                        break;
+
+                    case 2:
+                        drawSquares();
+                        Console.WriteLine("Work in progress... Press any key to return to main menu...");
+                        Console.ReadKey(true);
+                        break;
+
+                    case 3:
+                        return;
+                }
+            }
+        }
+
+        private static void textMasterMinds()
+        {
+            string emptyLine = new string(' ', 60);
 
             int tries = 0;
             Console.ForegroundColor = ConsoleColor.White;
@@ -93,7 +99,7 @@ namespace MichaelsMasterMindsConsole
                 {
                     //Just setting it to the top (0, 0)
                     Console.SetCursorPosition(0, 0);
-                    int number = getNumber(String.Format("Please give me {0} number", numberNames[i]));
+                    int number = getNumber(String.Format("Please give me {0} number\n", numberNames[i]));
                     bool isAddSuccessful = userInput.AddDigit(number);
 
                     if (!isAddSuccessful)
@@ -147,6 +153,40 @@ namespace MichaelsMasterMindsConsole
 
             Console.WriteLine(String.Format("Congratulations! You win! It took you {0} tries.", tries));
             Console.ReadKey();
+        }
+
+        private static void drawSquares()
+        {
+            char block = (char)9608; //0x2588;
+            string blockLine = new string(block, 3);
+            string emptyLine = new string(' ', 60);
+
+            //Console.WriteLine($"0x2580: {(char)0x2580}\n");
+            //Console.WriteLine($"0x2584: {(char)0x2584}\n");
+
+            //Setting all numbers to black and setting the blocks and numbers positions
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.CursorLeft = 70;
+            Console.WriteLine(String.Format("1: {0}", blockLine));
+            Console.CursorLeft = 70;
+            Console.WriteLine(String.Format("   {0}\n", blockLine));
+
+            for (int i = 9; i < 16; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.CursorLeft = 70;
+                Console.Write(String.Format("{0}:", i - 7));
+
+                //using console colors 9-16 which is 7 numbers (because we already have one so it's 8 total)
+                Console.ForegroundColor = (ConsoleColor)i;
+                Console.CursorLeft = 70;
+                Console.WriteLine(String.Format("{0}: {1}", i - 7, blockLine));
+                Console.CursorLeft = 70;
+                Console.WriteLine(String.Format("   {0}\n", blockLine));
+
+                Console.WriteLine();
+            };
+
         }
     }
 }
