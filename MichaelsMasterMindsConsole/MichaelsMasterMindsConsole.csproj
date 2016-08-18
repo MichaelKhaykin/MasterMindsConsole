@@ -46,8 +46,10 @@
     <Compile Include="Enum.cs" />
     <Compile Include="MasterMindsDigit.cs" />
     <Compile Include="MasterMindsNumber.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConsoleSprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
