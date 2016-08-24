@@ -168,11 +168,13 @@ namespace MichaelsMasterMindsConsole
             string[] texture = { blockLine, blockLine };
             int lineSpacing = texture.Length + 1;
 
-            ConsoleSprite[] squares = new ConsoleSprite[8];
+            Square[] squares = new Square[8];
             int x = 70;
             int y = 0;
 
-            squares[0] = new ConsoleSprite(texture, new Point(x, y), ConsoleColor.Black);
+            squares[0] = new Square(texture, new Point(x, y), ConsoleColor.Black, 'K');
+            squares[0].LetterPosition = new Point(x - 2, y);
+            squares[0].IsLetterVisible = true;
             y += lineSpacing;
 
             for (int i = 9; i < 16; i++)
@@ -181,13 +183,16 @@ namespace MichaelsMasterMindsConsole
                 int squareNumber = i - 8;
                 ConsoleColor color = (ConsoleColor)i;
 
-                squares[squareNumber] = new ConsoleSprite(texture, new Point(x, y), color);
+                Square square = new Square(texture, new Point(x, y), color, color.ToString()[0]);
+                square.LetterPosition = new Point(x - 2, y);
+                square.IsLetterVisible = true;
+                squares[squareNumber] = square;
                 y += lineSpacing;
             };
 
-            foreach (ConsoleSprite square in squares)
+            foreach (Square square in squares)
             {
-                square.Draw();
+                square.Draw(); 
             }
 
         }

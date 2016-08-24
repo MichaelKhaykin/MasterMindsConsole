@@ -22,7 +22,7 @@ namespace MichaelsMasterMindsConsole
             this.Position = position;
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             Console.ForegroundColor = Color;
 
