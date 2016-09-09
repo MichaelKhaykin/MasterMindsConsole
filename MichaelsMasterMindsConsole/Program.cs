@@ -62,7 +62,7 @@ namespace MichaelsMasterMindsConsole
 
                     case 2:
                         drawSquares();
-                        Console.WriteLine("\nWork in progress... Press any key to return to main menu...");
+                        Console.CursorVisible = false;
                         Console.ReadKey(true);
                         break;
 
@@ -71,7 +71,7 @@ namespace MichaelsMasterMindsConsole
                 }
             }
         }
-
+       
         private static void textMasterMinds()
         {
             string emptyLine = new string(' ', 60);
@@ -161,19 +161,31 @@ namespace MichaelsMasterMindsConsole
             //Console.WriteLine($"0x2580: {(char)0x2580}\n");
             //Console.WriteLine($"0x2584: {(char)0x2584}\n");
 
+            char topBlock = (char)0x2584;
+            char bottomBlock = (char)0x2580;
+
             char block = (char)9608; //0x2588;
             string blockLine = new string(block, 3);
             string emptyLine = new string(' ', 60);
 
-            string[] texture = { blockLine, blockLine };
-            int lineSpacing = texture.Length + 1;
+            //string[] texture = { blockLine, blockLine };
+
+            string[] texture =
+            {
+                new String(topBlock, 3),
+                blockLine,
+                new String(bottomBlock, 3)
+            };
+
+
+            int lineSpacing = texture.Length;
 
             Square[] squares = new Square[8];
             int x = 70;
             int y = 0;
 
             squares[0] = new Square(texture, new Point(x, y), ConsoleColor.Black, 'K');
-            squares[0].LetterPosition = new Point(x - 2, y);
+            squares[0].LetterPosition = new Point(x + 1, y + 1);
             squares[0].IsLetterVisible = true;
             y += lineSpacing;
 
@@ -184,7 +196,7 @@ namespace MichaelsMasterMindsConsole
                 ConsoleColor color = (ConsoleColor)i;
 
                 Square square = new Square(texture, new Point(x, y), color, color.ToString()[0]);
-                square.LetterPosition = new Point(x - 2, y);
+                square.LetterPosition = new Point(x + 1, y + 1);
                 square.IsLetterVisible = true;
                 squares[squareNumber] = square;
                 y += lineSpacing;
@@ -192,9 +204,34 @@ namespace MichaelsMasterMindsConsole
 
             foreach (Square square in squares)
             {
-                square.Draw(); 
+                square.Draw();
             }
 
+            //TODO: Draw empty box at 0,0
+            //Use chars from: https://en.wikipedia.org/wiki/Box-drawing_character
+            char topLeftCorner = (char)0x250E;
+            char topRightCorner = (char)0x2512;
+            char bottomLeftCorner = (char)0x2516;
+            char bottomRightCorner = (char)0x251A;
+            char horizontalLine = (char)0x2500;
+            char verticalLine = (char)0x2503;
+
+            string[] emptySquareTexture =
+            {
+                String.Concat(topLeftCorner, horizontalLine, topRightCorner),
+                String.Concat(verticalLine, ' ', verticalLine),
+                String.Concat(bottomLeftCorner, horizontalLine, bottomRightCorner)
+            };
+
+            Square emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?');
+            emptySquare.IsLetterVisible = true;
+
+            for (int i = 0; i < 4; i++)
+            {
+                emptySquare.Position = new Point(i * emptySquare.Width, 0);
+                emptySquare.LetterPosition = new Point(i * emptySquare.Width + 1, 1);
+                emptySquare.Draw();
+            }
         }
     }
 }

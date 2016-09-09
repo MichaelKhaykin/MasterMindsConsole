@@ -14,6 +14,48 @@ namespace MichaelsMasterMindsConsole
 
         public ConsoleColor Color { get; set; }
 
+        public int Height
+        {
+            get
+            {
+                if(Texture != null)
+                { 
+                    return Texture.Length;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                int longestString = 0;
+
+                if (Texture != null)
+                {
+                    //Find and return the length of the longest string
+                    //Make an int that's called "longestString", and start it with zero
+                    //Loop through the Texture string array; compare the length of EACH string in the array to longestString;
+                    //IF the string length is greater, set the longestString variable equal to that length; otherwise, do nothing
+                    //After you're done with the loop, return longestString
+                 
+                    for (int i = 0; i < Texture.Length; i++)
+                    {
+                        if (Texture[i].Length > longestString)
+                        {
+                            longestString = Texture[i].Length;
+                        }
+                                      
+                    }
+                }
+
+                return longestString;
+            }
+        }
 
         public ConsoleSprite(string[] texture, Point position, ConsoleColor color)
         {
