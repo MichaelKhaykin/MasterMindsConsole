@@ -54,11 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="Notes\Gameplay.txt" />
     <Content Include="Notes\MasterMindsArrayPicture.png" />
+    <Content Include="Notes\MasterMindsConsoleLayout.png" />
+    <Content Include="Notes\MasterMindsConsoleSelectorMovement.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

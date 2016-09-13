@@ -226,12 +226,25 @@ namespace MichaelsMasterMindsConsole
             Square emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?');
             emptySquare.IsLetterVisible = true;
 
-            for (int i = 0; i < 4; i++)
+            int margin = 1;
+            int space = 3;
+
+            for (int col = 0; col < 4; col++)
             {
-                emptySquare.Position = new Point(i * emptySquare.Width, 0);
-                emptySquare.LetterPosition = new Point(i * emptySquare.Width + 1, 1);
+                emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, 0);
+                emptySquare.LetterPosition = new Point(col * emptySquare.Width + 1 + margin + space * col, 1);
                 emptySquare.Draw();
             }
+
+            emptySquare.IsLetterVisible = false;
+            for (int row = 1; row < 6; row++)
+            {
+                for (int col = 0; col < 4; col++)
+                {
+                    emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, emptySquare.Height * row);
+                    emptySquare.Draw();
+                }
+            }           
         }
     }
 }
