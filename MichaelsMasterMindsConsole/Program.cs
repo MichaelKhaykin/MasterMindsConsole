@@ -228,7 +228,7 @@ namespace MichaelsMasterMindsConsole
 
             int margin = 1;
             int space = 3;
-
+           
             for (int col = 0; col < 4; col++)
             {
                 emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, 0);
@@ -236,15 +236,23 @@ namespace MichaelsMasterMindsConsole
                 emptySquare.Draw();
             }
 
+            int maxRows = 5;
             emptySquare.IsLetterVisible = false;
-            for (int row = 1; row < 6; row++)
+
+            for (int row = 1; row <= maxRows; row++)
             {
                 for (int col = 0; col < 4; col++)
                 {
                     emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, emptySquare.Height * row);
                     emptySquare.Draw();
                 }
-            }           
+            }
+
+            Point currentSquarePosition = new Point(margin, maxRows * emptySquare.Height);
+            Square currentSelector = new Square(emptySquareTexture, currentSquarePosition, ConsoleColor.Yellow, '!');
+            currentSelector.IsLetterVisible = true;
+            currentSelector.LetterPosition = new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1);
+            currentSelector.Draw();
         }
     }
 }
