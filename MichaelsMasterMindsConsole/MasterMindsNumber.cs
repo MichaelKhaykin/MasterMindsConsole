@@ -12,12 +12,27 @@ namespace MichaelsMasterMindsConsole
     public class MasterMindsNumber
     {
 
-        MasterMindsDigit[] numbersArray = new MasterMindsDigit[4];
+        private MasterMindsDigit[] numbersArray = new MasterMindsDigit[4];
 
-        public void CreateNumber()
+        /// <summary>
+        /// Accesses the array of MasterMindsDigits
+        /// </summary>
+        /// <param name="index">Index to access at. Valid values are 0 to 4</param>
+        /// <returns>MasterMindsDigit at the specified index</returns>
+        public MasterMindsDigit this[int index]
+        {
+            get { return numbersArray[index]; }
+        }
+
+        public virtual void CreateNumber(int min, int max)
+        {
+            CreateNumber(min, max, min, max);
+        }
+
+        public virtual void CreateNumber(int minFirst = 1, int maxFirst = 10, int min = 0, int max = 10)
         {
             Random rand = new Random();
-            int firstNumber = rand.Next(1, 10);
+            int firstNumber = rand.Next(minFirst, maxFirst);
 
             MasterMindsDigit firstDigit = new MasterMindsDigit(firstNumber, DigitStates.Correct);
             numbersArray[0] = firstDigit;
@@ -25,7 +40,7 @@ namespace MichaelsMasterMindsConsole
 
             for (int i = 1; i < 4; i++)
             {
-                int newNumber = rand.Next(0, 10);
+                int newNumber = rand.Next(min, max);
 
                 if (this.contains(newNumber))
                 {

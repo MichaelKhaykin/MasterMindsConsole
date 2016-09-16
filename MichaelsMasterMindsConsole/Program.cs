@@ -193,9 +193,9 @@ namespace MichaelsMasterMindsConsole
             {
                 //using console colors 9-16 which is 7 numbers (because we already have one so it's 8 total)
                 int squareNumber = i - 8;
-                ConsoleColor color = (ConsoleColor)i;
+                ConsoleColor colorr = (ConsoleColor)i;
 
-                Square square = new Square(texture, new Point(x, y), color, color.ToString()[0]);
+                Square square = new Square(texture, new Point(x, y), colorr, colorr.ToString()[0]);
                 square.LetterPosition = new Point(x + 1, y + 1);
                 square.IsLetterVisible = true;
                 squares[squareNumber] = square;
@@ -222,7 +222,6 @@ namespace MichaelsMasterMindsConsole
                 String.Concat(verticalLine, ' ', verticalLine),
                 String.Concat(bottomLeftCorner, horizontalLine, bottomRightCorner)
             };
-
             Square emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?');
             emptySquare.IsLetterVisible = true;
 
@@ -254,11 +253,16 @@ namespace MichaelsMasterMindsConsole
             currentSelector.LetterPosition = new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1);
             currentSelector.Draw();
 
+            //Generate random MasterMinds that the player has to guess
+            MasterMindsNumber computerNumber = new MasterMindsNumber();
+            computerNumber.CreateNumber(0, 8);
 
+            var colorMap = new ConsoleColor[] { ConsoleColor.Black, ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White };
 
             int counter = 0;
             int currentRow = maxRows;
             bool isFilled = false;
+
             while (true)
             {
                 ConsoleKeyInfo pressedKey = Console.ReadKey(true);
@@ -294,8 +298,25 @@ namespace MichaelsMasterMindsConsole
                         currentSelector.LetterPosition = new Point(currentSelector.Position.X + 1, currentSelector.Position.Y + 1);
                         currentSelector.Draw();
                     }
-                    
+                    else
+                    {
+                        break;
+                    }        
                 }
+            }
+
+            //Display computer's number
+            for (int col = 0; col < 4; col++)
+            {
+                int colorIndex = computerNumber[col].Number;
+                ConsoleColor color = colorMap[colorIndex];
+
+                Point Position = new Point(col * emptySquare.Width + margin + space * col, 0);
+                Square currentSquare = new Square(squares[col].Texture, currentSelector.Position, color, squares[col].Letter);
+
+                //Point LetterPosition = new Point(col * emptySquare.Width + 1 + margin + space * col, 1);
+                currentSquare.Position = new Point(Position.X, Position.Y);
+                currentSquare.Draw();
             }
         }
     }
