@@ -61,8 +61,8 @@ namespace MichaelsMasterMindsConsole
                         break;
 
                     case 2:
-                        drawSquares();
                         Console.CursorVisible = false;
+                        drawSquares();
                         Console.ReadKey(true);
                         break;
 
@@ -71,7 +71,7 @@ namespace MichaelsMasterMindsConsole
                 }
             }
         }
-       
+
         private static void textMasterMinds()
         {
             string emptyLine = new string(' ', 60);
@@ -228,7 +228,7 @@ namespace MichaelsMasterMindsConsole
 
             int margin = 1;
             int space = 3;
-           
+
             for (int col = 0; col < 4; col++)
             {
                 emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, 0);
@@ -253,6 +253,50 @@ namespace MichaelsMasterMindsConsole
             currentSelector.IsLetterVisible = true;
             currentSelector.LetterPosition = new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1);
             currentSelector.Draw();
+
+
+
+            int counter = 0;
+            int currentRow = maxRows;
+            bool isFilled = false;
+            while (true)
+            {
+                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
+
+                for (int i = 0; i < squares.Length; i++)
+                {
+                    if (pressedKey.KeyChar == squares[i].Letter || pressedKey.KeyChar - 32 == squares[i].Letter)
+                    {
+                        isFilled = true;
+
+                        //TODO: This square will be lost if we clear the screen... need to add to list, once we finalize it
+                        Square currentSquare = new Square(squares[i].Texture, currentSelector.Position, squares[i].Color, squares[i].Letter);
+                        currentSquare.IsLetterVisible = false;
+                        currentSquare.Draw();
+                        break;
+                    }
+                }
+
+                if (pressedKey.Key == ConsoleKey.Enter && isFilled)
+                {
+                    isFilled = false;
+                    counter++;
+                    if (counter == 4)
+                    {
+                        counter = 0;
+                        currentRow--;
+                    }
+
+                    if (currentRow > 0)
+                    {
+                        int movePerPlacedSquare = space + emptySquare.Width;
+                        currentSelector.Position = new Point(margin + movePerPlacedSquare * counter, currentRow * emptySquare.Height);
+                        currentSelector.LetterPosition = new Point(currentSelector.Position.X + 1, currentSelector.Position.Y + 1);
+                        currentSelector.Draw();
+                    }
+                    
+                }
+            }
         }
     }
 }
