@@ -13,7 +13,7 @@ namespace MichaelsMasterMindsConsole
         /// </summary>
         /// <param name="message">Displays message 4 times</param>
         /// <returns>digit between 0 and 9</returns>
-        static int getNumber(string message, char min = '0', char max = '9')
+        public static int GetNumber(string message, char min = '0', char max = '9')
         {
             Console.Write(message);
             int number = -1;
@@ -34,6 +34,8 @@ namespace MichaelsMasterMindsConsole
 
         static void Main(string[] args)
         {
+            MasterMindsBase game;
+
             Console.OutputEncoding = Encoding.Unicode;
 
             while (true)
@@ -50,19 +52,20 @@ namespace MichaelsMasterMindsConsole
                 Console.WriteLine("2) Graphical version");
                 Console.WriteLine("3) Exit");
                 Console.WriteLine();
-                int choice = getNumber("Enter selection => ", '1', '3');
+                int choice = GetNumber("Enter selection => ", '1', '3');
 
                 Console.Clear();
-
                 switch (choice)
                 {
                     case 1:
-                        textMasterMinds();
+                        game = new MasterMindsText();
+                        game.Play();
                         break;
 
                     case 2:
                         Console.CursorVisible = false;
-                        drawSquares();
+                        game = new GraphicalMasterMinds();
+                        game.Play();
                         Console.ReadKey(true);
                         break;
 
@@ -72,252 +75,5 @@ namespace MichaelsMasterMindsConsole
             }
         }
 
-        private static void textMasterMinds()
-        {
-            string emptyLine = new string(' ', 60);
-
-            int tries = 0;
-            Console.ForegroundColor = ConsoleColor.White;
-
-            MasterMindsNumber computerNumber = new MasterMindsNumber();
-            computerNumber.CreateNumber();
-
-            String[] numberNames = { "first", "second", "third", "fourth" };
-            bool didUserWin = false;
-
-            do
-            {
-                tries++;
-                MasterMindsNumber userInput = new MasterMindsNumber();
-
-                //Clearing lines so new numbers could be entered
-                Console.SetCursorPosition(0, 1);
-                Console.WriteLine(emptyLine);
-                Console.WriteLine(emptyLine);
-
-                for (int i = 0; i < 4; i++)
-                {
-                    //Just setting it to the top (0, 0)
-                    Console.SetCursorPosition(0, 0);
-                    int number = getNumber(String.Format("Please give me {0} number\n", numberNames[i]));
-                    bool isAddSuccessful = userInput.AddDigit(number);
-
-                    if (!isAddSuccessful)
-                    {
-                        //Setting 2 lines down
-                        Console.SetCursorPosition(0, 2);
-                        Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
-                        i--;
-                    }
-                    else
-                    {
-                        //Setting it to the position of the current number
-                        Console.SetCursorPosition(i, 1);
-                        Console.WriteLine(number);
-                        Console.WriteLine(emptyLine);
-                    }
-                }
-
-                //Compare the two MasterMindsNumnber objects
-                didUserWin = userInput.Check(computerNumber);
-
-
-                //This is the checking setting it 5 lines down
-                Console.SetCursorPosition(0, 5);
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                for (int i = 0; i < 5; i++)
-                {
-                    Console.WriteLine(emptyLine);
-                }
-                //This is making the checking results Yellow and then once were ready to continue it becomes gray
-                Console.SetCursorPosition(0, 5);
-                Console.WriteLine("Checking... here are the results:");
-                Console.WriteLine(userInput);
-                Console.ForegroundColor = ConsoleColor.White;
-
-                Console.WriteLine("Press any key to try again...");
-                Console.ReadKey(true);
-
-                //This is just making the checking gray by rewriting it on the same lines but gray
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.SetCursorPosition(0, 5);
-                Console.WriteLine("Checking... here are the results:");
-                Console.WriteLine(userInput);
-                Console.ForegroundColor = ConsoleColor.White;
-
-                //Erases the "Press any key to try again" 
-                Console.SetCursorPosition(0, 11);
-                Console.WriteLine(emptyLine);
-
-            } while (!didUserWin);
-
-            Console.WriteLine(String.Format("Congratulations! You win! It took you {0} tries.", tries));
-            Console.ReadKey();
-        }
-
-        private static void drawSquares()
-        {
-            //Save for later
-            //Console.WriteLine($"0x2580: {(char)0x2580}\n");
-            //Console.WriteLine($"0x2584: {(char)0x2584}\n");
-
-            char topBlock = (char)0x2584;
-            char bottomBlock = (char)0x2580;
-
-            char block = (char)9608; //0x2588;
-            string blockLine = new string(block, 3);
-            string emptyLine = new string(' ', 60);
-
-            //string[] texture = { blockLine, blockLine };
-
-            string[] texture =
-            {
-                new String(topBlock, 3),
-                blockLine,
-                new String(bottomBlock, 3)
-            };
-
-
-            int lineSpacing = texture.Length;
-
-            Square[] squares = new Square[8];
-            int x = 70;
-            int y = 0;
-
-            squares[0] = new Square(texture, new Point(x, y), ConsoleColor.Black, 'K');
-            squares[0].LetterPosition = new Point(x + 1, y + 1);
-            squares[0].IsLetterVisible = true;
-            y += lineSpacing;
-
-            for (int i = 9; i < 16; i++)
-            {
-                //using console colors 9-16 which is 7 numbers (because we already have one so it's 8 total)
-                int squareNumber = i - 8;
-                ConsoleColor colorr = (ConsoleColor)i;
-
-                Square square = new Square(texture, new Point(x, y), colorr, colorr.ToString()[0]);
-                square.LetterPosition = new Point(x + 1, y + 1);
-                square.IsLetterVisible = true;
-                squares[squareNumber] = square;
-                y += lineSpacing;
-            };
-
-            foreach (Square square in squares)
-            {
-                square.Draw();
-            }
-
-            //TODO: Draw empty box at 0,0
-            //Use chars from: https://en.wikipedia.org/wiki/Box-drawing_character
-            char topLeftCorner = (char)0x250E;
-            char topRightCorner = (char)0x2512;
-            char bottomLeftCorner = (char)0x2516;
-            char bottomRightCorner = (char)0x251A;
-            char horizontalLine = (char)0x2500;
-            char verticalLine = (char)0x2503;
-
-            string[] emptySquareTexture =
-            {
-                String.Concat(topLeftCorner, horizontalLine, topRightCorner),
-                String.Concat(verticalLine, ' ', verticalLine),
-                String.Concat(bottomLeftCorner, horizontalLine, bottomRightCorner)
-            };
-            Square emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?');
-            emptySquare.IsLetterVisible = true;
-
-            int margin = 1;
-            int space = 3;
-
-            for (int col = 0; col < 4; col++)
-            {
-                emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, 0);
-                emptySquare.LetterPosition = new Point(col * emptySquare.Width + 1 + margin + space * col, 1);
-                emptySquare.Draw();
-            }
-
-            int maxRows = 5;
-            emptySquare.IsLetterVisible = false;
-
-            for (int row = 1; row <= maxRows; row++)
-            {
-                for (int col = 0; col < 4; col++)
-                {
-                    emptySquare.Position = new Point(col * emptySquare.Width + margin + space * col, emptySquare.Height * row);
-                    emptySquare.Draw();
-                }
-            }
-
-            Point currentSquarePosition = new Point(margin, maxRows * emptySquare.Height);
-            Square currentSelector = new Square(emptySquareTexture, currentSquarePosition, ConsoleColor.Yellow, '!');
-            currentSelector.IsLetterVisible = true;
-            currentSelector.LetterPosition = new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1);
-            currentSelector.Draw();
-
-            //Generate random MasterMinds that the player has to guess
-            MasterMindsNumber computerNumber = new MasterMindsNumber();
-            computerNumber.CreateNumber(0, 8);
-
-            var colorMap = new ConsoleColor[] { ConsoleColor.Black, ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White };
-
-            int counter = 0;
-            int currentRow = maxRows;
-            bool isFilled = false;
-
-            while (true)
-            {
-                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
-
-                for (int i = 0; i < squares.Length; i++)
-                {
-                    if (pressedKey.KeyChar == squares[i].Letter || pressedKey.KeyChar - 32 == squares[i].Letter)
-                    {
-                        isFilled = true;
-
-                        //TODO: This square will be lost if we clear the screen... need to add to list, once we finalize it
-                        Square currentSquare = new Square(squares[i].Texture, currentSelector.Position, squares[i].Color, squares[i].Letter);
-                        currentSquare.IsLetterVisible = false;
-                        currentSquare.Draw();
-                        break;
-                    }
-                }
-
-                if (pressedKey.Key == ConsoleKey.Enter && isFilled)
-                {
-                    isFilled = false;
-                    counter++;
-                    if (counter == 4)
-                    {
-                        counter = 0;
-                        currentRow--;
-                    }
-
-                    if (currentRow > 0)
-                    {
-                        int movePerPlacedSquare = space + emptySquare.Width;
-                        currentSelector.Position = new Point(margin + movePerPlacedSquare * counter, currentRow * emptySquare.Height);
-                        currentSelector.LetterPosition = new Point(currentSelector.Position.X + 1, currentSelector.Position.Y + 1);
-                        currentSelector.Draw();
-                    }
-                    else
-                    {
-                        break;
-                    }        
-                }
-            }
-
-            //Display computer's number
-            for (int col = 0; col < 4; col++)
-            {
-                int colorIndex = computerNumber[col].Number;
-                ConsoleColor color = colorMap[colorIndex];
-
-                Point Position = new Point(col * emptySquare.Width + margin + space * col, 0);
-                Square currentSquare = new Square(squares[col].Texture, currentSelector.Position, color, squares[col].Letter);
-
-                //Point LetterPosition = new Point(col * emptySquare.Width + 1 + margin + space * col, 1);
-                currentSquare.Position = new Point(Position.X, Position.Y);
-                currentSquare.Draw();
-            }
-        }
     }
 }
