@@ -24,7 +24,7 @@ namespace MichaelsMasterMindsConsole
 
             do
             {
-               
+
                 tries++;
                 MasterMindsNumber userInput = new MasterMindsNumber();
                 //Clearing lines so new numbers could be entered
@@ -32,12 +32,21 @@ namespace MichaelsMasterMindsConsole
                 Console.WriteLine(emptyLine);
                 Console.WriteLine(emptyLine);
 
-                for (int i = 0; i < 4; i++)
-                {          
+                for (int i = 0; i < 5; i++)
+                {
+                    int number = 0;
                     //Just setting it to the top (0, 0)
                     Console.SetCursorPosition(0, 0);
-                    
-                    int number = Program.GetNumber(String.Format("Please give me {0} number   \n", numberNames[i]));
+                    if (i != 4)
+                    {
+
+                        number = Program.GetNumber(String.Format("Please give me {0} number                    \n",
+                             numberNames[i]));
+                    }
+                    else
+                    {
+                        number = Program.GetNumber("If you're done then please press enter.                     \n");
+                    }
 
                     if (number == Program.BACKSPACE_KEY)
                     {
@@ -59,28 +68,37 @@ namespace MichaelsMasterMindsConsole
                         i--;    //Set i back by 1 again, as we just removed a digit, and need the user to re-enter it.
                         continue;
                     }
-                    else if(number == Program.ENTER_KEY)
+
+                    else if (number == Program.ENTER_KEY)
                     {
-                        //TODO: Make this work
-                        continue;
+                        i--;
+                        break;
                     }
 
-                    bool isAddSuccessful = userInput.AddDigit(number);
-
-                    if (!isAddSuccessful)
+                    if (i < 4)
                     {
+                        bool isAddSuccessful = userInput.AddDigit(number);
 
-                        //Setting 2 lines down
-                        Console.SetCursorPosition(0, 2);
-                        Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
-                        i--;
+
+                        if (!isAddSuccessful)
+                        {
+
+                            //Setting 2 lines down
+                            Console.SetCursorPosition(0, 2);
+                            Console.WriteLine("It looks like we already have the number {0}; please try again.", number);
+                            i--;
+                        }
+                        else
+                        {
+                            //Setting it to the position of the current number
+                            Console.SetCursorPosition(i, 1);
+                            Console.WriteLine(number);
+                            Console.WriteLine(emptyLine);
+                        }
                     }
                     else
                     {
-                        //Setting it to the position of the current number
-                        Console.SetCursorPosition(i, 1);
-                        Console.WriteLine(number);
-                        Console.WriteLine(emptyLine);
+                        i--;
                     }
                 }
 
