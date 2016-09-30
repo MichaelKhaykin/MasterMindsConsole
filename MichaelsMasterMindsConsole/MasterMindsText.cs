@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MichaelsMasterMindsConsole
 {
     public class MasterMindsText : MasterMindsBase
-    { 
+    {
         public override void Play()
         {
             string emptyLine = new string(' ', 60);
@@ -20,25 +20,56 @@ namespace MichaelsMasterMindsConsole
             String[] numberNames = { "first", "second", "third", "fourth" };
             bool didUserWin = false;
 
+            Console.CursorVisible = false;
+
             do
             {
+               
                 tries++;
                 MasterMindsNumber userInput = new MasterMindsNumber();
-
                 //Clearing lines so new numbers could be entered
                 Console.SetCursorPosition(0, 1);
                 Console.WriteLine(emptyLine);
                 Console.WriteLine(emptyLine);
 
                 for (int i = 0; i < 4; i++)
-                {
+                {          
                     //Just setting it to the top (0, 0)
                     Console.SetCursorPosition(0, 0);
-                    int number = Program.GetNumber(String.Format("Please give me {0} number\n", numberNames[i]));
+                    
+                    int number = Program.GetNumber(String.Format("Please give me {0} number   \n", numberNames[i]));
+
+                    if (number == Program.BACKSPACE_KEY)
+                    {
+                        //First key pressed was backspace; ignore, but set i back so we don't lose a digit...
+                        if (i == 0)
+                        {
+                            i--;
+                            continue;
+                        }
+
+                        i--;    //Set i back by 1, as current "digit" was a backspace key
+
+                        userInput.RemoveLastDigit();
+
+                        Console.SetCursorPosition(i, 1);
+                        Console.Write(" ");
+                        Console.CursorLeft--;
+
+                        i--;    //Set i back by 1 again, as we just removed a digit, and need the user to re-enter it.
+                        continue;
+                    }
+                    else if(number == Program.ENTER_KEY)
+                    {
+                        //TODO: Make this work
+                        continue;
+                    }
+
                     bool isAddSuccessful = userInput.AddDigit(number);
 
                     if (!isAddSuccessful)
                     {
+
                         //Setting 2 lines down
                         Console.SetCursorPosition(0, 2);
                         Console.WriteLine("It looks like we already have the number {0}; please try again.", number);

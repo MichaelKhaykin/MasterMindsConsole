@@ -86,6 +86,25 @@ namespace MichaelsMasterMindsConsole
             return true;
         }
 
+        /// <summary>
+        /// Removes last digit from the MasterMindsNumber.
+        /// </summary>
+        /// <returns>true if there was a number to remove; false otherwise</returns>
+        public bool RemoveLastDigit()
+        {
+            for (int i = numbersArray.Length - 1 ; i >= 0; i--)
+            {
+                if (numbersArray[i] != null)
+                {
+                    numbersArray[i] = null;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
         public bool Check(MasterMindsNumber correctNumber)
         {
             bool allRightAndRightSpot = true;

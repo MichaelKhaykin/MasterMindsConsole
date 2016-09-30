@@ -8,11 +8,14 @@ namespace MichaelsMasterMindsConsole
 {
     class Program
     {
+        public const int ENTER_KEY = 1356;
+        public const int BACKSPACE_KEY = -198;
+
         /// <summary>
         /// Asks the user for a digit; reads the digit and checks if it's between 0-9  
         /// </summary>
         /// <param name="message">Displays message 4 times</param>
-        /// <returns>digit between 0 and 9</returns>
+        /// <returns>digit between 0 and 9; returns BACKSPACE_KEY value for backspace, and ENTER_KEY value for enter</returns>
         public static int GetNumber(string message, char min = '0', char max = '9')
         {
             Console.Write(message);
@@ -21,11 +24,21 @@ namespace MichaelsMasterMindsConsole
             //ASCII values for numbers 0 through 9 are 48 through 57
             while (number == -1)
             {
-                char pressedKey = Console.ReadKey(true).KeyChar;
+                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
 
-                if (pressedKey <= max && pressedKey >= min)
+                if(pressedKey.Key == ConsoleKey.Backspace)
                 {
-                    number = int.Parse(pressedKey.ToString());
+                    return BACKSPACE_KEY;
+                }
+
+                if (pressedKey.Key == ConsoleKey.Enter)
+                {
+                    return ENTER_KEY;
+                }
+
+                if (pressedKey.KeyChar <= max && pressedKey.KeyChar >= min)
+                {
+                    number = int.Parse(pressedKey.KeyChar.ToString());
                 }
             }
 
