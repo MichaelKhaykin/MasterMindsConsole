@@ -8,6 +8,54 @@ namespace MichaelsMasterMindsConsole
 {
     public class GraphicalMasterMinds : MasterMindsBase
     {
+        public void createLegend()
+        {
+            string[] texture = getTexture();
+
+            Tuple<Square, Point, string>[] legend =
+            {
+                new Tuple<Square, Point, string>
+                (
+                    new Square(texture, new Point(43, 2), ConsoleColor.Yellow),
+                    new Point(25, 3),
+                    "Unchecked"
+                ),
+
+                new Tuple<Square, Point, string>
+                (
+                    new Square(texture, new Point(43, 5), ConsoleColor.Yellow, '?', new Point(44, 6)),
+                    new Point(25, 6),
+                    "Correct"
+                ),
+
+                new Tuple<Square, Point, string>
+                (
+                     new Square(texture, new Point(43, 8), ConsoleColor.Yellow, '+', new Point(44, 9)),
+                     new Point(25, 9),
+                     "Wrong Spot"
+                ),
+
+                new Tuple<Square, Point, string>
+                (
+                     new Square(texture, new Point(43, 11), ConsoleColor.Yellow, 'X', new Point(44, 12)),
+                     new Point(25, 12),
+                     "Wrong"
+                )
+            };
+
+            Console.SetCursorPosition(32, 0);
+            Console.WriteLine("    Legend:");
+            Console.SetCursorPosition(32, 1);
+            Console.WriteLine("--------------");
+            
+            foreach (var legendPart in legend)
+            {
+                legendPart.Item1.Draw();
+                Console.SetCursorPosition(legendPart.Item2.X + 7, legendPart.Item2.Y);
+                Console.WriteLine(legendPart.Item3);
+            }
+
+        }
         public override void Play()
         {
             string[] texture = getTexture();
@@ -18,10 +66,10 @@ namespace MichaelsMasterMindsConsole
             int x = 70;
             int y = 0;
             Square[] squares = new Square[8];
+            createLegend();
 
-            squares[0] = new Square(texture, new Point(x, y), ConsoleColor.Black, 'K');
-            squares[0].LetterPosition = new Point(x + 1, y + 1);
-            squares[0].IsLetterVisible = true;
+
+            squares[0] = new Square(texture, new Point(x, y), ConsoleColor.Black, 'K', new Point(x + 1, y + 1));
             y += lineSpacing;
 
             for (int i = 9; i < 16; i++)
@@ -30,9 +78,7 @@ namespace MichaelsMasterMindsConsole
                 int squareNumber = i - 8;
                 ConsoleColor colorr = (ConsoleColor)i;
 
-                Square square = new Square(texture, new Point(x, y), colorr, colorr.ToString()[0]);
-                square.LetterPosition = new Point(x + 1, y + 1);
-                square.IsLetterVisible = true;
+                Square square = new Square(texture, new Point(x, y), colorr, colorr.ToString()[0], new Point(x + 1, y + 1));
                 squares[squareNumber] = square;
                 y += lineSpacing;
             };
@@ -44,7 +90,7 @@ namespace MichaelsMasterMindsConsole
 
             string[] emptySquareTexture = getEmptySquareTexture();
             Square emptySquare;
-            emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?');
+            emptySquare = new Square(emptySquareTexture, new Point(0, 0), ConsoleColor.Gray, '?', new Point(0, 0));
             emptySquare.IsLetterVisible = true;
 
             int margin = 1;
@@ -70,9 +116,8 @@ namespace MichaelsMasterMindsConsole
             }
 
             Point currentSquarePosition = new Point(margin, maxRows * emptySquare.Height);
-            Square currentSelector = new Square(emptySquareTexture, currentSquarePosition, ConsoleColor.Yellow, '!');
-            currentSelector.IsLetterVisible = true;
-            currentSelector.LetterPosition = new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1);
+            Square currentSelector = new Square(emptySquareTexture, currentSquarePosition, ConsoleColor.Yellow, '!', new Point(currentSquarePosition.X + 1, currentSquarePosition.Y + 1));
+
             currentSelector.Draw();
 
             //Generate random MasterMinds that the player has to guess
@@ -95,8 +140,7 @@ namespace MichaelsMasterMindsConsole
                         isFilled = true;
 
                         //TODO: This square will be lost if we clear the screen... need to add to list, once we finalize it
-                        Square currentSquare = new Square(squares[i].Texture, currentSelector.Position, squares[i].Color, squares[i].Letter);
-                        currentSquare.IsLetterVisible = false;
+                        Square currentSquare = new Square(squares[i].Texture, currentSelector.Position, squares[i].Color, squares[i].Letter, new Point(squares[i].LetterPosition.X, squares[i].LetterPosition.Y));
                         currentSquare.Draw();
                         break;
                     }
@@ -159,7 +203,7 @@ namespace MichaelsMasterMindsConsole
                 ConsoleColor color = colorMap[colorIndex];
 
                 Point Position = new Point(col * emptySquare.Width + margin + space * col, 0);
-                Square currentSquare = new Square(squares[col].Texture, currentSelector.Position, color, squares[col].Letter);
+                Square currentSquare = new Square(squares[col].Texture, currentSelector.Position, color, squares[col].Letter, new Point(squares[col].LetterPosition.X, squares[col].LetterPosition.Y));
 
                 //Point LetterPosition = new Point(col * emptySquare.Width + 1 + margin + space * col, 1);
                 currentSquare.Position = new Point(Position.X, Position.Y);

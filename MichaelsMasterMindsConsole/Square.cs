@@ -12,10 +12,18 @@ namespace MichaelsMasterMindsConsole
         public Point LetterPosition { get; set; }
         public bool IsLetterVisible { get; set; }
 
-        public Square(string[] texture, Point position, ConsoleColor color, char letter)
-            : base(texture, position, color)
+        public Square(string[] texture, Point position, ConsoleColor color, char letter, Point letterPosition)
+            : this(texture, position, color)
         {
             Letter = letter;
+            LetterPosition = letterPosition;
+            IsLetterVisible = true;
+        }   
+
+        public Square(string[] texture, Point position, ConsoleColor color)
+            : base(texture, position, color)
+        {
+
         }
 
         public override void Draw()
