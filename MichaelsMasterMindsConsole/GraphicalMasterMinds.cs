@@ -8,6 +8,8 @@ namespace MichaelsMasterMindsConsole
 {
     public class GraphicalMasterMinds : MasterMindsBase
     {
+        char checkMark = (char)0x221A;
+
         public void createLegend()
         {
             string[] texture = getTexture();
@@ -23,7 +25,7 @@ namespace MichaelsMasterMindsConsole
 
                 new Tuple<Square, Point, string>
                 (
-                    new Square(texture, new Point(43, 5), ConsoleColor.Yellow, '?', new Point(44, 6)),
+                    new Square(texture, new Point(43, 5), ConsoleColor.Yellow, checkMark, new Point(44, 6)),
                     new Point(25, 6),
                     "Correct"
                 ),
@@ -47,7 +49,7 @@ namespace MichaelsMasterMindsConsole
             Console.WriteLine("    Legend:");
             Console.SetCursorPosition(32, 1);
             Console.WriteLine("--------------");
-            
+
             foreach (var legendPart in legend)
             {
                 legendPart.Item1.Draw();
@@ -129,6 +131,11 @@ namespace MichaelsMasterMindsConsole
             int currentRow = maxRows;
             bool isFilled = false;
 
+            MasterMindsNumber userNumber = new MasterMindsNumber();
+
+            ConsoleColor selectedColor = ConsoleColor.DarkGray;     //init to a color we don't use
+            var line = new Square[4];
+
             while (true)
             {
                 ConsoleKeyInfo pressedKey = Console.ReadKey(true);
@@ -138,9 +145,11 @@ namespace MichaelsMasterMindsConsole
                     if (pressedKey.KeyChar == squares[i].Letter || pressedKey.KeyChar - 32 == squares[i].Letter)
                     {
                         isFilled = true;
+                        selectedColor = squares[i].Color;
 
-                        //TODO: This square will be lost if we clear the screen... need to add to list, once we finalize it
                         Square currentSquare = new Square(squares[i].Texture, currentSelector.Position, squares[i].Color, squares[i].Letter, new Point(squares[i].LetterPosition.X, squares[i].LetterPosition.Y));
+                        line[counter] = currentSquare;
+
                         currentSquare.Draw();
                         break;
                     }
@@ -148,12 +157,67 @@ namespace MichaelsMasterMindsConsole
 
                 if (pressedKey.Key == ConsoleKey.Enter && isFilled)
                 {
+
+                    //Find the index of the selectedColor in colorMap array
+                    bool isUserChoiceValid = true;
+                    for (int i = 0; i < colorMap.Length; i++)
+                    {
+                        if (colorMap[i] == selectedColor)
+                        {
+                            selectedColor = ConsoleColor.DarkGray;     //change to a color we don't use
+
+                            //add the corresponding digit to userNumber
+                            isUserChoiceValid = userNumber.AddDigit(i);
+                            break;
+                        }
+                    }
+
+                    if(!isUserChoiceValid)
+                    {
+                        continue;
+                    }
+
                     isFilled = false;
                     counter++;
+
                     if (counter == 4)
                     {
                         counter = 0;
                         currentRow--;
+
+                        //Check userNumber
+                        bool didUserWin = userNumber.Check(ComputerNumber);
+
+                        //TODO: Display results
+                        for (int i = 0; i < line.Length; i++)
+                        {
+                            if (userNumber[i].State == DigitStates.Correct)
+                            {
+                                line[i].Letter = checkMark;
+                            }
+                            else if (userNumber[i].State == DigitStates.Incorrect)
+                            {
+                                line[i].Letter = 'X';
+                            }
+                            else 
+                            {
+                                line[i].Letter = '+';
+                            }
+
+                            line[i].IsLetterVisible = true;
+                            line[i].LetterPosition = new Point(line[i].Position.X + 1, line[i].Position.Y + 1);
+                            line[i].Draw();
+                            
+                        }
+
+                        if (didUserWin)
+                        {
+                            break;
+                        }
+
+                        //Reset userNumber and line of squares
+                        line = new Square[4];
+                        userNumber = new MasterMindsNumber();
                     }
 
                     if (currentRow > 0)
@@ -177,7 +241,7 @@ namespace MichaelsMasterMindsConsole
         private static string[] getEmptySquareTexture()
         {
             //TODO: Draw empty box at 0,0
-            //Use chars from: https://en.wikipedia.org/wiki/Box-
+            //Use chars from: https://en.wikipedia.org/wiki/Box-drawing_character
 
             char topLeftCorner = (char)0x250E;
             char topRightCorner = (char)0x2512;
